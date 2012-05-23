@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../src/handler'
+%w(handler command user_manager).each { |filename| require_relative "../src/#{filename}" }
 
 class FakeWebSocket
   def onopen
