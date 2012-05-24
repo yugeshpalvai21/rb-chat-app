@@ -1,9 +1,6 @@
 var ChatWebSocket = {
   _ws: null,
   _url: 'ws://localhost:8181/',
-  _commands: {
-    'getAllUsers': '$:/cmd get_all_users'
-  },
 
   init: function() {
     var self = this;
@@ -19,11 +16,19 @@ var ChatWebSocket = {
     };
 
     this._ws.onmessage = function(event) {
-      console.log(event);
+      var data = JSON.parse(event.data);
+      if (data.users) {
+        buildOnlineUsersList(data.users);
+      }
     };
   },
 
   getAllUsers: function() {
-    this._ws.send(this._commands['getAllUsers'])
+    message = { type: Command['GET_ALL_USERS'] };
+    this._ws.send(JSON.stringify(message));
+  },
+
+  send: function(json) {
+    this._ws.send(JSON.stringify(json));
   }
 };

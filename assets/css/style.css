@@ -1,9 +1,41 @@
 body {
   background-color: #222;
-  width: 100%;
-  padding: 20px;
+  padding: 10px;
+  color: #eee;
 }
 
-body, label {
-  color: #eee;
+#left {
+  float: left;
+  width: 19%;
+  margin-right: 1%;
+  background-color: #444;
+  padding: 10px;
+  height: 600px;
+}
+
+#right {
+  float: left;
+  width: 75%;
+  background-color: #444;
+  padding: 10px;
+  height: 600px;
+}
+
+#messages {
+  width: 100%;
+}
+
+#online-users-title {
+  font-weight: bold; 
+  font-size: 18px; 
+  margin-bottom: 15px;
+}
+
+#message {
+  width: 90%;
+}
+
+#send-message-container {
+  margin-top: 550px;
+  display: none;
 }

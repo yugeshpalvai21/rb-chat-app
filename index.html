@@ -3,41 +3,55 @@
   <head>
     <meta charset="utf-8" />  
     <title>Event machine powered chat application</title>  
-    <link href="assets/external/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script language="javascript" type="text/javascript">  
-
-      function init() { 
-        websocket = new WebSocket("ws://localhost:8181/");
-
-        websocket.onopen = function() { 
-          console.log("Connected");
-        }; 
-
-        websocket.onclose = function() { 
-          console.log("Disconnected");
-        }; 
-      }  
-
-      window.onload = function() {
-        init();
-      };
-
-    </script>  
+    <link href="assets/css/style.css" rel="stylesheet">
+    <script type='text/javascript' src='assets/js/jquery-1.7.2.min.js'></script>
+    <script type='text/javascript' src='assets/js/command.js'></script>
+    <script type='text/javascript' src='assets/js/chat_websocket.js'></script>
   </head>
 
   <body>
-    <div class='form-horizontal'>
-      <fieldset>
-        <div class='control-group'>
-          <label class='control-label' for='screen_name'>Screen Name</label>
-          <div class='controls'>
-            <div class='input-append'>
-              <input class='span2' id='screen_name' size='17' type='text'>
-              <button class='btn' type='button'>Start!</button>
-            </div>
-          </div>
+    <div>
+      <div id='left'>
+        <div id='online-users-title'>Online Users</div>
+        <div>
+          <ul id='online-users'></ul>
         </div>
-      </fieldset>
+      </div>
+      <div id='right'>
+        <div id='registration'>
+          <label for='screen_name'>Screen Name</label>
+          <input type='text' id='screen_name'>
+          <button id='set_screen_name'>Start Chatting!</button>
+        </div>
+        <div id='messages'></div>
+        <div id='send-message-container'>
+          <input type='text' id='message'>
+          <button id='send-message'>Send</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
+<script language="javascript" type="text/javascript">  
+  var screenName = null;
+
+  ChatWebSocket.init();
+
+  $('#set_screen_name').click(function() {
+    screenName = $('#screen_name').val();
+
+    var json = { type: Command['ADD_USER'], value: screenName };
+    ChatWebSocket.send(json);
+    $('#online-users').append("<li>" + screenName + "</li>");
+    $('#registration').hide();
+    $('#send-message-container').show();
+  });
+
+  var buildOnlineUsersList = function(users) {
+    var html = "";
+    users.forEach(function(user) {
+      html += "<li>" + user + "</li>";
+    });
+    $('#online-users').html(html);
+  };
+</script>
