@@ -67,5 +67,4 @@ describe Handler do
       Handler.onmessage_handler(JSON(json))
     end
   end
-  
 end

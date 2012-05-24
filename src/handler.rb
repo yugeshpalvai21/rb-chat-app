@@ -4,7 +4,10 @@ class Handler
   class << self
     def init(ws)
       @users ||= []
+      @wss ||= []
       @ws = ws
+      @wss << ws
+      p ws.methods.sort
       init_handlers
     end
 
@@ -26,7 +29,7 @@ class Handler
           data = { 'users' => @users }
           @ws.send(JSON(data))
         when Command::MESSAGE
-          @ws.send(message['value'])
+          @wss.each { |ws| ws.send(JSON(message)) }
       end
     end
 

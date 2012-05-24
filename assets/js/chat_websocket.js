@@ -20,6 +20,11 @@ var ChatWebSocket = {
       if (data.users) {
         buildOnlineUsersList(data.users);
       }
+      else if (data.type == 'message') {
+        console.log(data);
+        $('#messages').append("<li><strong>" + data.sender + "</strong>: " + 
+                              data.value + "</li>");
+      }
     };
   },
 

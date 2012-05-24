@@ -23,7 +23,9 @@
           <input type='text' id='screen_name'>
           <button id='set_screen_name'>Start Chatting!</button>
         </div>
-        <div id='messages'></div>
+        <div id='messages'>
+          <ul></ul>
+        </div>
         <div id='send-message-container'>
           <input type='text' id='message'>
           <button id='send-message'>Send</button>
@@ -45,7 +47,25 @@
     $('#online-users').append("<li>" + screenName + "</li>");
     $('#registration').hide();
     $('#send-message-container').show();
+    $('#messages').show();
   });
+
+  $('#send-message').click(function() {
+    sendMessage();
+  });
+
+  $('#message').keypress(function(e) {
+    if (e.keyCode == 13) sendMessage();
+  });
+
+  var sendMessage = function() {
+    var json = { type: 'message', 
+                 value: $('#message').val(), 
+                 sender: screenName };
+    ChatWebSocket.send(json);
+
+    $('#message').val('');
+  };
 
   var buildOnlineUsersList = function(users) {
     var html = "";

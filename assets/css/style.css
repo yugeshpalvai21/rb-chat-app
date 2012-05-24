@@ -35,7 +35,14 @@ body {
   width: 90%;
 }
 
+#messages {
+  list-style: none;
+  height: 535px;
+  overflow-y: scroll;
+  display: none;
+}
+
 #send-message-container {
-  margin-top: 550px;
+  margin-top: 10px;
   display: none;
 }
