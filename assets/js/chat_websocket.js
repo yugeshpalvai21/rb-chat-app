@@ -2,12 +2,13 @@ var ChatWebSocket = {
   _ws: null,
   _url: 'ws://localhost:8181/',
 
-  init: function() {
+  init: function(callback) {
     var self = this;
     this._ws = new WebSocket(this._url);
 
     this._ws.onopen = function() { 
       console.log("Connected");
+      callback();
       self.getAllUsers();
     }; 
 
@@ -21,9 +22,11 @@ var ChatWebSocket = {
         buildOnlineUsersList(data.users);
       }
       else if (data.type == 'message') {
-        console.log(data);
         $('#messages').append("<li><strong>" + data.sender + "</strong>: " + 
                               data.value + "</li>");
+      }
+      else if (data.type == 'new_user') {
+        $('#online-users').append("<li>" + data.value + "</li>");
       }
     };
   },

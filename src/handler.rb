@@ -7,7 +7,6 @@ class Handler
       @wss ||= []
       @ws = ws
       @wss << ws
-      p ws.methods.sort
       init_handlers
     end
 
@@ -23,13 +22,16 @@ class Handler
       case message['type']
         when Command::ADD_USER
           @users << message['value']
+          data = JSON({ 'type' => 'new_user', 'value' => message['value'] })
+          @wss.each { |ws| ws.send(data) }
         when Command::REMOVE_USER
           @users.delete(message['value'])
         when Command::GET_ALL_USERS
           data = { 'users' => @users }
           @ws.send(JSON(data))
         when Command::MESSAGE
-          @wss.each { |ws| ws.send(JSON(message)) }
+          data = JSON(message)
+          @wss.each { |ws| ws.send(data) }
       end
     end
 

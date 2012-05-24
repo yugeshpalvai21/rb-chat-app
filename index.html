@@ -37,14 +37,15 @@
 <script language="javascript" type="text/javascript">  
   var screenName = null;
 
-  ChatWebSocket.init();
 
   $('#set_screen_name').click(function() {
     screenName = $('#screen_name').val();
-
     var json = { type: Command['ADD_USER'], value: screenName };
-    ChatWebSocket.send(json);
-    $('#online-users').append("<li>" + screenName + "</li>");
+
+    ChatWebSocket.init(function() {
+      ChatWebSocket.send(json);
+    });
+
     $('#registration').hide();
     $('#send-message-container').show();
     $('#messages').show();
