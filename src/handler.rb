@@ -22,7 +22,8 @@ class Handler
       case message['type']
         when Command::ADD_USER
           @users << message['value']
-          data = JSON({ 'type' => 'new_user', 'value' => message['value'] })
+          data = JSON({ 'type' => Command::NEW_USER, 
+                        'value' => message['value'] })
           @wss.each { |ws| ws.send(data) }
         when Command::REMOVE_USER
           @users.delete(message['value'])
@@ -40,6 +41,7 @@ class Handler
     end
 
     def onclose_handler
+      @wss.delete(@ws)
       puts "Client disconnected"
     end
   end

@@ -23,19 +23,30 @@ describe Handler do
 
   context 'onmessage_handler' do
 
-    after(:each) { Handler.instance_variable_set(:@users, []) }
+    after(:each) do 
+      Handler.instance_variable_set(:@users, []) 
+      Handler.instance_variable_set(:@wss, []) 
+      Handler.instance_variable_set(:@ws, nil) 
+    end
 
     it 'should add user to @users' do
-      json = { 'type' => Command::ADD_USER, 'value' => 'Sophy' }
-      Handler.onmessage_handler(JSON(json))
-      Handler.instance_variable_get(:@users).last.should == json['value']
+      user = 'Sophy'
+      post_json = { 'type' => Command::ADD_USER, 'value' => user }
+      response_json = { 'type' => Command::NEW_USER, 'value' => user }
+      fake_websocket = double('EM::WebSocket')
+      fake_websocket.should_receive(:send).with(JSON(response_json))
+      Handler.instance_variable_set(:@wss, [fake_websocket])
+
+      Handler.onmessage_handler(JSON(post_json))
+
+      Handler.instance_variable_get(:@users).last.should == post_json['value']
     end
 
     it 'should remove user from @users' do
-      remove_user_json = { 'type' => Command::REMOVE_USER, 'value' => 'Sophy' }
-      add_user_json = { 'type' => Command::ADD_USER, 'value' => 'Sophy' }
+      user = 'Sophy'
+      Handler.instance_variable_set(:@users, [user])
+      remove_user_json = { 'type' => Command::REMOVE_USER, 'value' => user }
 
-      Handler.onmessage_handler(JSON(add_user_json))
       Handler.onmessage_handler(JSON(remove_user_json))
 
       Handler.instance_variable_get(:@users).empty?.should == true
@@ -61,8 +72,8 @@ describe Handler do
     it 'should call send on @ws passing message["value"]' do
       json = { 'type' => Command::MESSAGE, 'value' => 'hi' }
       fake_websocket = double('EM::WebSocket')
-      fake_websocket.should_receive(:send).with(json['value']).once
-      Handler.instance_variable_set(:@ws, fake_websocket)
+      fake_websocket.should_receive(:send).with(JSON(json)).once
+      Handler.instance_variable_set(:@wss, [fake_websocket])
 
       Handler.onmessage_handler(JSON(json))
     end
