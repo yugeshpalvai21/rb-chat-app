@@ -6,12 +6,11 @@ It's a chat application powered by [Event Machine](https://github.com/eventmachi
 To set up the application
 =========================
 
-Clone the app `git clone git@github.com:ungsophy/rb-chat-app.git`
-Then run `bundle install`
-Start chart application `ruby src/chat-server.rb`
-Start HTTP server to serve html page. The easiest way to start HTTP server is using Python SimpleHTTPServer. `python -m SimpleHTTPServer`
-
-Open your browser and go to `http://localhost:8000`
+* Clone the app `git clone git@github.com:ungsophy/rb-chat-app.git`
+* Then run `bundle install`
+* Start chart application `ruby src/chat-server.rb`
+* Start HTTP server to serve html page. The easiest way to start HTTP server is using Python SimpleHTTPServer. `python -m SimpleHTTPServer`
+* Open your browser and go to `http://localhost:8000`
 
 Notices
 =======
